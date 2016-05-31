@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke-width: 3;
+  stroke-opacity: .3;
+}
+
+</style>
+<body>
+<script src="node_modules/d3/d3.js"></script>
+<script src="node_modules/d3-queue/build/d3-queue.min.js"></script>
+<script>
+function getUrlVars()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+};
+var c1 = '#999999';
+var c2 = '#a65628';
+
+var width = 1920,
+    height = 1080;
+
+var color = function(d){
+  switch(d){
+    case 'en': return '#e41a1c'
+    break;
+    case 'nl': return '#ff7f00'
+    break;
+    case 'jo': return '#984ea3'
+    break;
+    case 'fr':
+     return '#377eb8'
+    break;
+    default:
+    return '#4daf4a'
+    break;
+  }
+}
+
+var force = d3.layout.force()
+    .charge(-120)
+    .linkDistance(30)
+    .size([width, height]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+  var links = [];
+  d3_queue.queue()
+  .defer(d3.tsv, "./data/people.tsv")
+  .defer(d3.tsv, "./data/netwerk-2.tsv")
+  .defer(d3.tsv, "./data/network-1.tsv")
+  .await(function(error, ppl, twee, een) {
+  if (error) throw error;
+  ppl.forEach(function (d){
+    d.linkCount = 0;
+    d.volk= d.Volk.toLowerCase();
+    return d;
+  })
+
+  var mode = getUrlVars()['netwerk'];
+  if(mode == '1') {
+    console.log('een')
+    een.forEach(function(d){
+      var sourceNode = ppl.filter(function(n) {
+          return n.ID === d.DID;
+      })[0],
+      targetNode = ppl.filter(function(n) {
+          return n.ID === d.GID;
+      })[0];
+      sourceNode.linkCount++;
+      targetNode.linkCount++;
+      
+      links.push({
+          source: sourceNode,
+          target: targetNode,
+          color: c1
+      });
+    })
+  }
+  else if (mode == '2') {
+    console.log('twee')
+    twee.forEach(function(d){
+      var sourceNode = ppl.filter(function(n) {
+          return n.ID === d.DID;
+      })[0],
+      targetNode = ppl.filter(function(n) {
+          return n.ID === d.GID;
+      })[0];
+      sourceNode.linkCount++;
+      targetNode.linkCount++;
+      
+      links.push({
+          source: sourceNode,
+          target: targetNode,
+          color: c2
+      });
+    })
+  }
+  else {
+    console.log(mode)
+    een.forEach(function(d){
+      var sourceNode = ppl.filter(function(n) {
+          return n.ID === d.DID;
+      })[0],
+      targetNode = ppl.filter(function(n) {
+          return n.ID === d.GID;
+      })[0];
+      sourceNode.linkCount++;
+      targetNode.linkCount++;
+      
+      links.push({
+          source: sourceNode,
+          target: targetNode,
+          color: c1
+      });
+    })
+    twee.forEach(function(d){
+      var sourceNode = ppl.filter(function(n) {
+          return n.ID === d.DID;
+      })[0],
+      targetNode = ppl.filter(function(n) {
+          return n.ID === d.GID;
+      })[0];
+      sourceNode.linkCount++;
+      targetNode.linkCount++;
+      
+      links.push({
+          source: sourceNode,
+          target: targetNode,
+          color: c2
+      });
+    })
+  }
+
+  force
+      .nodes(d3.values(ppl).filter(function(d){ return d.linkCount;}))
+      .links(links)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke", function(d){return d.color});
+
+  var node = svg.selectAll(".node")
+      .data(ppl)
+    .enter().append("circle")
+      .attr("class", "node")
+      .attr("r", function(d) {return 3+ d.linkCount*0.3})
+      .style("fill", function(d) { return color(d.volk); })
+      .call(force.drag);
+
+  node.append("title")
+      .text(function(d) { return d.Naam+ ' - ' + d.ID; });
+
+  force.drag().on('dragend',function(d){
+    var los = d3.event.sourceEvent.shiftKey;
+    d.fixed=los?0:1;
+  })
+  node.on()
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+});
+
+</script>

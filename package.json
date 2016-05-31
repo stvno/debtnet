@@ -1,0 +1,23 @@
+{
+  "name": "debtnet",
+  "version": "1.0.0",
+  "description": "Historicl debt visualizer",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stvno/debtnet.git"
+  },
+  "author": "Steven M. Ottens",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stvno/debtnet/issues"
+  },
+  "homepage": "https://github.com/stvno/debtnet#readme",
+  "dependencies": {
+    "d3": "^3.5.17",
+    "d3-queue": "^2.0.3"
+  }
+}
