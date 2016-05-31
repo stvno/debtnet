@@ -75,7 +75,6 @@ var svg = d3.select("body").append("svg")
 
   var mode = getUrlVars()['netwerk'];
   if(mode == '1') {
-    console.log('een')
     een.forEach(function(d){
       var sourceNode = ppl.filter(function(n) {
           return n.ID === d.DID;
@@ -94,7 +93,6 @@ var svg = d3.select("body").append("svg")
     })
   }
   else if (mode == '2') {
-    console.log('twee')
     twee.forEach(function(d){
       var sourceNode = ppl.filter(function(n) {
           return n.ID === d.DID;
