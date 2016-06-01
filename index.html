@@ -3,7 +3,7 @@
 <style>
 
 .node {
-  stroke-width: 1.5px;
+  stroke-width: 3px;
 }
 
 .link {
@@ -107,7 +107,7 @@ var svg = d3.select("body").append("svg")
       .style("fill", function(d) { return color(d.volk); })
       .style("stroke", function(d) {
          var kleur;
-if (d.petitie === 0) {kleur = 'white'}
+if (d.petitie === 0) {kleur = 'none'}
 else {kleur = 'black'};
         return kleur;
       })
