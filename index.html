@@ -30,6 +30,7 @@ function getUrlVars()
 };
 var c1 = '#999999';
 var c2 = '#a65628';
+var c3 = '#454545';  
 
 var width = 1920,
     height = 1080;
@@ -65,7 +66,8 @@ var svg = d3.select("body").append("svg")
   .defer(d3.tsv, "./data/netwerk-2.tsv")
   .defer(d3.tsv, "./data/network-1.tsv")
   .defer(d3.tsv, "./data/Lijsten Nederlanders.txt")
-  .await(function(error, ppl, twee, een, petitie) {
+  .defer(d3.tsv, "./data/Brieven.txt")
+  .await(function(error, ppl, twee, een, petitie, drie) {
   if (error) throw error;
   ppl.forEach(function (d){
     d.linkCount = 0;
@@ -83,6 +85,9 @@ var svg = d3.select("body").append("svg")
   }
   else if (mode == '2') {
     links =  parseDebt([twee],[c2],ppl);
+  }
+  else if (mode =='3'){
+    links = parseDebt([drie],[c3], ppl);
   }
   else {
     links = parseDebt([een,twee],[c1,c2],ppl);
@@ -127,7 +132,6 @@ else {kleur = 'black'};
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
-
     node.attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
   });
@@ -155,5 +159,6 @@ function parseDebt(files,colors,ppl) {
   })
   return lnks;
 }
-
 </script>
+
+
