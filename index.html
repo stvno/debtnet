@@ -30,10 +30,10 @@ function getUrlVars()
 };
 var c1 = '#999999';
 var c2 = '#a65628';
-var c3 = '#454545';  
+var c3 = '#00BFFF';  
 
-var width = 1920,
-    height = 1080;
+var width = 3840,
+    height = 2160;
 
 var color = function(d){
   switch(d){
@@ -90,7 +90,7 @@ var svg = d3.select("body").append("svg")
     links = parseDebt([drie],[c3], ppl);
   }
   else {
-    links = parseDebt([een,twee],[c1,c2],ppl);
+    links = parseDebt([een,twee, drie],[c1,c2,c3],ppl);
   }
 
   force
