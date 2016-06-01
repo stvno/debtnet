@@ -79,75 +79,13 @@ var svg = d3.select("body").append("svg")
 
   var mode = getUrlVars()['netwerk'];
   if(mode == '1') {
-    een.forEach(function(d){
-      var sourceNode = ppl.filter(function(n) {
-          return n.ID === d.DID;
-      })[0],
-      targetNode = ppl.filter(function(n) {
-          return n.ID === d.GID;
-      })[0];
-      sourceNode.linkCount++;
-      targetNode.linkCount++;
-      
-      links.push({
-          source: sourceNode,
-          target: targetNode,
-          color: c1
-      });
-    })
+    links = parseDebt([een],[c1],ppl);
   }
   else if (mode == '2') {
-    twee.forEach(function(d){
-      var sourceNode = ppl.filter(function(n) {
-          return n.ID === d.DID;
-      })[0],
-      targetNode = ppl.filter(function(n) {
-          return n.ID === d.GID;
-      })[0];
-      sourceNode.linkCount++;
-      targetNode.linkCount++;
-      
-      links.push({
-          source: sourceNode,
-          target: targetNode,
-          color: c2
-      });
-    })
+    links =  parseDebt([twee],[c2],ppl);
   }
   else {
-    console.log(mode)
-    een.forEach(function(d){
-      var sourceNode = ppl.filter(function(n) {
-          return n.ID === d.DID;
-      })[0],
-      targetNode = ppl.filter(function(n) {
-          return n.ID === d.GID;
-      })[0];
-      sourceNode.linkCount++;
-      targetNode.linkCount++;
-      
-      links.push({
-          source: sourceNode,
-          target: targetNode,
-          color: c1
-      });
-    })
-    twee.forEach(function(d){
-      var sourceNode = ppl.filter(function(n) {
-          return n.ID === d.DID;
-      })[0],
-      targetNode = ppl.filter(function(n) {
-          return n.ID === d.GID;
-      })[0];
-      sourceNode.linkCount++;
-      targetNode.linkCount++;
-      
-      links.push({
-          source: sourceNode,
-          target: targetNode,
-          color: c2
-      });
-    })
+    links = parseDebt([een,twee],[c1,c2],ppl);
   }
 
   force
@@ -194,5 +132,28 @@ else {kleur = 'black'};
         .attr("cy", function(d) { return d.y; });
   });
 });
+
+function parseDebt(files,colors,ppl) {
+  var lnks = [];
+  files.forEach(function(file,idx){
+    file.forEach(function(d){
+      var sourceNode = ppl.filter(function(n) {
+          return n.ID === d.DID;
+      })[0],
+      targetNode = ppl.filter(function(n) {
+          return n.ID === d.GID;
+      })[0];
+      sourceNode.linkCount++;
+      targetNode.linkCount++;
+      
+      lnks.push({
+          source: sourceNode,
+          target: targetNode,
+          color: colors[idx]
+      });
+    })
+  })
+  return lnks;
+}
 
 </script>
