@@ -30,7 +30,10 @@ function getUrlVars()
 };
 var c1 = '#999999';
 var c2 = '#a65628';
-var c3 = '#00BFFF';  
+var c3 = '#00BFFF';
+var c4 = '#999999';
+var c5 = '#a65628';
+var c6 = '00BFFF';  
 
 var width = 3840,
     height = 2160;
@@ -67,7 +70,10 @@ var svg = d3.select("body").append("svg")
   .defer(d3.tsv, "./data/network-1.tsv")
   .defer(d3.tsv, "./data/Lijsten Nederlanders.txt")
   .defer(d3.tsv, "./data/Brieven.txt")
-  .await(function(error, ppl, twee, een, petitie, drie) {
+  .defer(d3.tsv, "./data/StraatAmsterdam.txt")
+  .defer(d3.tsv, "./data/StraatMiddelburg.txt")
+  .defer(d3.tsv, "./data/StraatVlissingen.txt")
+  .await(function(error, ppl, twee, een, petitie, drie, vier, vijf, zes) {
   if (error) throw error;
   ppl.forEach(function (d){
     d.linkCount = 0;
@@ -88,6 +94,18 @@ var svg = d3.select("body").append("svg")
   }
   else if (mode =='3'){
     links = parseDebt([drie],[c3], ppl);
+  }
+  else if (mode =='4'){
+    links = parseDebt([vier], [c4], ppl);
+  }
+  else if (mode =='5'){
+    links = parseDebt([vijf], [c5], ppl);
+  }
+    else if (mode =='6'){
+    links = parseDebt([zes], [c6], ppl);
+  }
+  else if (mode == '7'){
+    links = parseDebt([vier, vijf, zes], [c4, c5, c6], ppl)
   }
   else {
     links = parseDebt([een,twee, drie],[c1,c2,c3],ppl);
