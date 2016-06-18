@@ -132,7 +132,7 @@ var svg = d3.select("body").append("svg")
          var kleur;
 if (d.petitie === 0) {kleur = 'none'}
 else {kleur = 'black'};
-        return kleur;
+        return 'none';
       })
       .call(force.drag);
 
